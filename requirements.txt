@@ -1,2 +1,3 @@
 requests
 google-cloud-storage
+!pip install requests_html
