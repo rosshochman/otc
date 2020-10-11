@@ -1,0 +1,47 @@
+import requests
+import csv
+import json
+import time
+from datetime import datetime
+import datetime
+
+def get_otc_tickers():
+    l = "http://otcmarkets.com/research/stock-screener/api/downloadCSV"
+    r = requests.get(l)
+    decoded_content = r.content.decode('utf-8')
+    cr = csv.reader(decoded_content.splitlines(), delimiter=',')
+    tickers = [x[0] for x in list(cr)]
+    return tickers
+
+ticker_list = get_otc_tickers()
+updated_ticker_list = ticker_list[1:]
+
+
+
+for i in updated_ticker_list:
+    try:
+        url = "https://backend.otcmarkets.com/otcapi/company/profile/full/"+i+""
+        r = requests.get(url).json()
+        info = r
+        #time.sleep(10)
+        #info = r.json()
+    except (json.decoder.JSONDecodeError):
+        time.sleep(60)
+        r = requests.get(url).json()
+        info = r
+    #print(info)
+    #print(info['securities'])
+    #sec = json.dumps(info, indent=4)
+    #print (sec["securities"])
+    #sec_details = (info["securities"][0])
+    try:
+        sec_details = (info["securities"][0])
+        epoch = sec_details["outstandingSharesAsOfDate"]
+        #date = datetime.datetime.fromtimestamp(int(epoch)).strftime('%Y-%m-%d %H:%M:%S')
+        #dt = time.ctime(epoch)
+        if sec_details["outstandingShares"] < 1000000000:
+            print (sec_details["symbol"], sec_details["outstandingShares"], epoch)
+        else:
+            print (sec_details["symbol"], "null")
+    except (KeyError):
+        print("null")
