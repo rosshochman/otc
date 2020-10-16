@@ -1,2 +1,1 @@
-requests
-google-cloud-storage
+pandas==1.1.3
