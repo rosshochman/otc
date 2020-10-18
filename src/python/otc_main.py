@@ -51,8 +51,12 @@ def main(argv=None):
     ticker_df = pd.DataFrame()
     failed_list = []
     print(len(ticker_list[0:n]))
+
+    ct = 0
     for ticker in ticker_list[0:n]:
         # print(f"{ticker} - {datetime.now()}")
+        if ct%100==0:
+            print(f"{ticker} - {datetime.now()}")
         time.sleep(randint(1,5))
         try:
             ticker_json = get_ticker_json(ticker)
@@ -63,6 +67,7 @@ def main(argv=None):
             print(f"{ticker} failed")
             failed_list.append(ticker)
             next
+        ct+=1
 
     failed_df = pd.DataFrame(failed_list, columns = ["failed_tickers"])
 

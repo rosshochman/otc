@@ -74,8 +74,8 @@ class Executor():
                  topic='mytopic',
                  project='myproject',
                  subname='default_sub',
-                 task_cmd="sleep 20",
-                 deadline=60):
+                 task_cmd="sleep 60",
+                 deadline=61):
         self.topic = topic
         self.project = project
         self.subname = "%s_%s" % (topic, subname)
@@ -164,36 +164,37 @@ class Executor():
     def run_task(self, msg):
         proc = Popen(self.task_cmd, stdout=PIPE, shell=True)
         stdout_reader = AsynchronousFileReader(proc.stdout, self.io_queue)
-        stdout_reader.start()
-        while not stdout_reader.eof():
-            # read line without blocking
-            while True:
-                try:
-                    # line = self.io_queue.get_nowait() # or q.get(timeout=.1)
-                    line = self.io_queue.get_nowait()  # could do timeout=.1
-                except Empty:
-                    break
-                else:
-                    self.job_log.info(line)
-
-            lease_age = datetime.now() - self.lease_start
-            if lease_age.seconds > (self.ackdeadline - 20):
-                # 10 seconds left in lease, renew
-                log.debug("extending lease")
-                try:
-                    resp = self.extend_lease(msg)
-                    self.extend_error_ct = 0
-                    self.lease_start = datetime.now()
-                except HttpError as e:
-                    if e.resp.status == 503:
-                        # service might return intermitant 503
-                        log.warning("PubSub returned 503")
-                        self.extend_error_ct += 1
-                        if self.extend_error_ct > 5:
-                            log.critical(
-                                "Too many error responses to extend request")
-                            raise
-            time.sleep(1)
+        # stdout_reader.start()
+        # while not stdout_reader.eof():
+        #     # read line without blocking
+        #     while True:
+        #         try:
+        #             # line = self.io_queue.get_nowait() # or q.get(timeout=.1)
+        #             line = self.io_queue.get_nowait()  # could do timeout=.1
+        #         except Empty:
+        #             break
+        #         else:
+        #             "do nothing"
+        #             # self.job_log.info(line)
+        #
+        #     lease_age = datetime.now() - self.lease_start
+        #     if lease_age.seconds > (self.ackdeadline - 20):
+        #         # 10 seconds left in lease, renew
+        #         log.debug("extending lease")
+        #         try:
+        #             resp = self.extend_lease(msg)
+        #             self.extend_error_ct = 0
+        #             self.lease_start = datetime.now()
+        #         except HttpError as e:
+        #             if e.resp.status == 503:
+        #                 # service might return intermitant 503
+        #                 log.warning("PubSub returned 503")
+        #                 self.extend_error_ct += 1
+        #                 if self.extend_error_ct > 5:
+        #                     log.critical(
+        #                         "Too many error responses to extend request")
+        #                     raise
+            # time.sleep(1)
 
         retcode = proc.poll()
         if retcode is not None:
