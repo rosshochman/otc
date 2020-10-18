@@ -12,20 +12,17 @@ def get_request(u):
     output request.response()
     '''
     count = 0
-    while True or count < 10:
+    while count < 10:
         try:
             r = requests.get(u)
-            break
+            count = 10
         except:
             count += 1
-            if count > 10:
-                print("failed to make request")
-                return None
             time.sleep(randint(1,5))
     return r
 
 
-def get_otc_tickers(l="http://otcmarkets.com/research/stock-screener/api/downloadCSV"):
+def get_otc_tickers(l="http://otcmarkets.com/research/stock-screener/api/downloadCSV", ticker_price=5):
     '''
     Quick and dirty function to get all of the otc tickers from otc markets
     ** This has not been vetted and it is unknown whether this list is comprehensive
@@ -34,12 +31,13 @@ def get_otc_tickers(l="http://otcmarkets.com/research/stock-screener/api/downloa
     r = get_request(l)
     decoded_content = r.content.decode('utf-8')
     cr = csv.reader(decoded_content.splitlines(), delimiter=',')
-    tickers = [x[0] for x in list(cr)][1:]
+    tickers = [x[0] for x in list(cr)[1:] if float(x[3]) < ticker_price]
     return sorted(tickers)
 
 
 def get_ticker_json(ticker):
     url = f"https://backend.otcmarkets.com/otcapi/company/profile/full/{ticker}"
     r = get_request(url)
+    # r = requests.get(url)
     ticker_json = r.json()
     return ticker_json
