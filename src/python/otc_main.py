@@ -52,7 +52,7 @@ def main(argv=None):
     failed_list = []
     print(len(ticker_list[0:n]))
     for ticker in ticker_list[0:n]:
-        print(f"{ticker} - {datetime.now()}")
+        # print(f"{ticker} - {datetime.now()}")
         time.sleep(randint(1,5))
         try:
             ticker_json = get_ticker_json(ticker)
