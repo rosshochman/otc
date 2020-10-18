@@ -11,9 +11,9 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'sudo chmod 666 /var/run/docker.sock']
 
-  # Give GCE permission to run docker
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'docker-credential-gcr configure-docker']
+# Give GCE permission to run docker
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'docker-credential-gcr configure-docker']
 
 # Connect to GCE server and pull new image
 - name: 'gcr.io/cloud-builders/gcloud'
