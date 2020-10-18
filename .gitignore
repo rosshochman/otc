@@ -130,4 +130,3 @@ dmypy.json
 
 *.json
 gce*.txt
-cloud_build.yaml

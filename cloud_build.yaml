@@ -1,7 +1,7 @@
 steps:
 # Build Docker image: docker build -f Dockerfile -t gcr.io/scarlet-labs/otc:latest .
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['gcloud builds submit', '--tag', 'gcr.io/scarlet-labs/otc:latest']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/scarlet-labs/otc:latest', '-f', 'Dockerfile', '.']
 
 # Push to GCR: gcloud docker -- push gcr.io/scarlet-labs/otc:latest
 - name: 'gcr.io/cloud-builders/docker'
