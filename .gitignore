@@ -130,3 +130,4 @@ dmypy.json
 
 *.json
 gce*.txt
+ubuntu_local.txt
