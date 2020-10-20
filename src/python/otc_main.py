@@ -39,7 +39,7 @@ def main(argv=None):
 
     args, _ = parser.parse_known_args(argv)
 
-    ticker_list = get_otc_tickers(ticker_price=float(args.ticker_price))
+    ticker_list, prices = get_otc_tickers(ticker_price=float(args.ticker_price))
 
     if args.n is None:
         n = len(ticker_list)
@@ -53,7 +53,7 @@ def main(argv=None):
     print(len(ticker_list[0:n]))
 
     ct = 0
-    for ticker in ticker_list[0:n]:
+    for ticker, price in zip(ticker_list[0:n], prices[0:n]):
         # print(f"{ticker} - {datetime.now()}")
         if ct%100==0:
             print(f"{ticker} - {datetime.now()}")
@@ -62,6 +62,7 @@ def main(argv=None):
             ticker_json = get_ticker_json(ticker)
             pt = parseTicker(ticker_json)
             df = pt.run()
+            df["price"] = price
             ticker_df = pd.concat([ticker_df, df], axis=0)
         except:
             print(f"{ticker} failed")

@@ -19,19 +19,6 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'docker -- pull gcr.io/scarlet-labs/otc:latest']
 
-# # Connect to server and stop current container
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE',  '--command', 'docker stop otc']
-#
-# # Connect to server and stop current container
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE',  '--command', 'docker rm otc']
-#
-#   # Connect to server and start new container
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE',  '--command', 'docker run  --restart always --name otc -d -p 443:443  --log-driver=gcplogs  gcr.io/scarlet-labs/otc:latest']
-
-
 substitutions:
   _SERVER: 'otc'
   _ZONE: 'us-central1-a'

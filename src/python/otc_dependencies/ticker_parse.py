@@ -58,4 +58,6 @@ class parseTicker:
     def run(self):
         single_item_df = self.get_single_item_df()
         list_item_df = self.get_list_item_df()
-        return pd.concat([single_item_df, list_item_df], axis=1)
+        concat_df = pd.concat([single_item_df, list_item_df], axis=1)
+        concat_df[[c for c in concat_df.columns if c.endswith("Date")]] = concat_df.filter(regex="(Date)$").apply(lambda x: pd.to_datetime(x, unit='ms', errors='ignore'), axis=1)
+        return concat_df
