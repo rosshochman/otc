@@ -17,7 +17,7 @@ steps:
 
 # Connect to GCE server and remove all other docker images
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'docker rmi -f $(docker image ls -a -q)']
+  args: ['compute', 'ssh', '$_SERVER', '--zone', '$_ZONE', '--command', 'docker system prune -a']
 
 # Connect to GCE server and pull new image
 - name: 'gcr.io/cloud-builders/gcloud'
