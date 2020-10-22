@@ -84,11 +84,12 @@ def main(argv=None):
     failed_df.to_csv("data/failed_tickers.csv", index = False)
 
     now = datetime.now()
+    partition = now.strftime("%Y%m%d%H")
 
     upload_blob(project_id=args.project_id,
                 bucket_name=args.bucket_name,
                 source_file_name="data/ticker_data.csv",
-                destination_blob_name=f"otc/ticker_data_{now.strftime("%Y%m%d%H")}.csv")
+                destination_blob_name=f"otc/ticker_data_{partition}.csv")
 
     upload_blob(project_id=args.project_id,
                 bucket_name=args.bucket_name,
