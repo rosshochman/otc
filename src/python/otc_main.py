@@ -115,7 +115,8 @@ def main(argv=None):
     except OSError:
         pass
 
-    send_notification("otc ticker run completed")
+    message = f"otc ticker run completed: https://storage.cloud.google.com/scarlet-crypto/otc/ticker_data_{partition}.csv"
+    send_notification(message)
 
 
     return "complete"
