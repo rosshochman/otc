@@ -1,0 +1,65 @@
+import openpyxl
+from openpyxl import load_workbook
+from openpyxl.styles import Color, Fill, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
+#import workbook and open active worksheet
+wb = load_workbook(filename = 'test.xlsx')
+ws = wb.active
+
+#change the share structure columns to have commas
+for cell in ws['C']:
+    cell.style = 'Comma [0]'
+    cell.font = Font(size=11)
+
+for cell in ws['F']:
+    cell.style = 'Comma [0]'
+    cell.font = Font(size=11)
+
+for cell in ws['H']:
+    cell.style = 'Comma [0]'
+    cell.font = Font(size=11)
+
+for cell in ws['J']:
+    cell.style = 'Comma [0]'
+    cell.font = Font(size=11)
+
+for cell in ws['O']:
+    cell.style = 'Comma [0]'
+    cell.font = Font(size=11)
+
+#bold and add color to headers
+for cell in ws["1:1"]:
+    cell.font = Font(bold=True)
+    cell.fill = PatternFill(start_color='0099CCFF', end_color='0099CCFF', fill_type='solid')
+
+#autosize most columns
+dims = {}
+for row in ws.rows:
+    for cell in row:
+        if cell.value:
+            dims[cell.column_letter] = max((dims.get(cell.column_letter, 0), len(str(cell.value))))
+for col, value in dims.items():
+    ws.column_dimensions[col].width = value
+
+#manually update some column width
+ws.column_dimensions['T'].width = 9
+ws.column_dimensions['J'].width = 20
+ws.column_dimensions['A'].width = 12
+ws.column_dimensions['C'].width = 20
+ws.column_dimensions['F'].width = 20
+ws.column_dimensions['H'].width = 20
+ws.column_dimensions['N'].width = 20
+ws.column_dimensions['O'].width = 20
+
+#make all rows same height
+row_total = range(1,200000)
+for x in row_total:
+        ws.row_dimensions[x].height = 14.3
+
+#add filters for columns
+ws.auto_filter.ref = ws.dimensions
+
+#save file as new xlsx and close
+wb.save('formatted_client_data.xlsx')
+wb.close()
